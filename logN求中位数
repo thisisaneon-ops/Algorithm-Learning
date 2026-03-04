@@ -1,0 +1,140 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+// 对数时间求中位数
+double Value(vector<int>v1, vector<int>v2)
+{
+	if (v1.size() > v2.size())
+	{
+		return Value(v2, v1);
+	}
+	if (v1.size() == 0)
+	{
+		int k = (v2.size() - 1) / 2;
+		if (v2.size() % 2 == 0)
+		{
+			return (v2[k] + v2[k + 1]) * 1.0 / 2;
+		}
+		else
+		{
+			return v2[k];
+		}
+	}
+	if (v2.size() == 0)
+	{
+		int k = (v1.size() - 1) / 2;
+		if (v1.size() % 2 == 0)
+		{
+			return (v1[k] + v1[k + 1]) * 1.0 / 2;
+		}
+		else
+		{
+			return v1[k];
+		}
+	}
+	int i = 0; // 记录个数
+	int j = 0;  // 记录个数
+	int begin = 0;
+	int end = v1.size();
+	int k = (v1.size() + v2.size() + 1) / 2;
+	while (begin <= end)
+	{
+		i = begin + (end - begin) / 2;
+		j = k - i;
+		if (i > 0 && j < v2.size() && v1[i - 1] > v2[j])
+		{
+			end = i - 1;
+		}
+		else if (j > 0 && i < v1.size() && v2[j - 1] > v1[i])
+		{
+			begin = i + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+	int left = 0;
+	// 判断异常：v1非常短，且元素都很大
+	if (i == 0)
+	{
+		// 中位数在v2里
+		left = v2[j - 1];
+	}
+	else if (j == 0)
+	{
+		// 中位数在v1里
+		left = v1[i - 1];
+	}
+	else
+	{
+		left = max(v1[i - 1], v2[j - 1]);
+	}
+	int right = 0;
+	if (i == v1.size())  // v1非常短，值都很小
+	{
+		right = v2[j];
+	}
+	else if (j == v2.size())  // v2太短，肯定在v1
+	{
+		left = v1[i];
+	}
+	else
+	{
+		right = min(v1[i], v2[j]);
+	}
+	if ((v1.size() + v2.size()) % 2 == 0) // 偶数长度
+	{
+		return (left + right) * 1.0 / 2;
+	}
+	else
+	{
+		return left;
+	}
+}
+
+int main()
+{
+	srand(time(nullptr));
+	vector<int>v1;
+	vector<int>v2;
+	for (int i = 0; i < rand() % 9 + 1; ++i)
+	{
+		v1.push_back(rand() % 100);
+	}
+	for (int i = 0; i < rand() % 9 + 1; ++i)
+	{
+		v2.push_back(rand() % 100);
+	}
+	sort(v1.begin(), v1.end());
+	sort(v2.begin(), v2.end());
+	cout << "size1: " << v1.size() << endl;
+	for (auto& i : v1)
+	{
+		cout << i << " ";
+	}
+	cout << endl;
+	cout << "size2: " << v2.size() << endl;
+	for (auto& i : v2)
+	{
+		cout << i << " ";
+	}
+	cout << endl;
+	cout << "Medium : OlogN:" << endl;
+	double Medium = Value(v1, v2);
+	cout << Medium << endl;
+	cout << "Regular situation" << endl;
+	v1.insert(v1.end(), v2.begin(), v2.end());
+	sort(v1.begin(), v1.end());	
+	if(v1.size() % 2 == 1)
+	{
+		cout << v1[v1.size() / 2] << endl;
+	}
+	else
+	{
+		cout << (v1[v1.size() / 2] + v1[v1.size() / 2 + 1]) / 2 << endl;
+	}
+	return 0;
+}
