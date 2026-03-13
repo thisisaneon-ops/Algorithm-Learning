@@ -50,14 +50,14 @@ int main()
 
     int target = 3;
 
-    // 左右指针法
+    // 左右指针法(不稳定，类似于快速排序，维护两个反向指针难度大)
     int newLength1 = removeTarget_LR(nums1, target);
     cout << "左右指针法结果: ";
     for (int i = 0; i < newLength1; i++)
         cout << nums1[i] << " ";
     cout << " 新长度: " << newLength1 << endl;
 
-    // 快慢指针法
+    // 快慢指针法(稳定)
     int newLength2 = removeTarget_FS(nums2, target);
     cout << "快慢指针法结果: ";
     for (int i = 0; i < newLength2; i++)
