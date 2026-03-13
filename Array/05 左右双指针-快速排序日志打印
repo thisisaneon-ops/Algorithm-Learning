@@ -1,0 +1,98 @@
+#include<iostream>
+using namespace std;
+
+void Hoare(int nums[], int i, int j) {
+    if (i >= j)
+    {
+        return;
+    }
+    cout << "============================" << endl;
+    cout << "当前处理数组部分" << endl;
+    for (int k = i; k <= j; k++)
+    {
+        cout << nums[k] << " ";
+    }
+    cout << endl;
+    cout << "============================" << endl;
+
+    int mid = i + (j - i) / 2;
+    int idx = mid;
+    swap(nums[i], nums[idx]);
+    int pivot = nums[i];
+    int left = i - 1;
+    int right = j + 1;
+
+    while (true) {
+        do {
+            left++;
+        } while (nums[left] < pivot);
+        do {
+            right--;
+        } while (nums[right] > pivot);
+        if (left >= right) {
+            cout << "===" << endl;
+            cout << "退出循环" << endl;
+            cout << "===" << endl;
+            break;
+        }
+        swap(nums[left], nums[right]);
+    }
+
+    cout << "============================" << endl;
+    cout << "此时left在 " << left << "位置" << "\nright在 " << right << "位置" << endl;
+    cout << "========" << endl;
+    cout << "当前数组状态：" << endl;
+    for (int k = i; k <= j; ++k)
+    {
+        cout << nums[k] << " ";
+    }
+    cout << endl;
+
+    if (left == right) {
+        for (int k = i; k < left; k++)
+        {
+            cout << "  ";
+        }
+        cout << "S" << endl;
+        cout << "========" << endl;
+        cout << "left和right指向同一个位置" << endl;
+    }
+    else if (left == right + 1) {
+        for (int k = i; k < right; k++)
+        {
+            cout << "  ";
+        }
+        cout << "R" << " " << "L" << endl;
+        cout << "========" << endl;
+        cout << "left在right右侧一个位置" << endl;
+    }
+    else {
+        cout << "不可能出现的情况" << endl;
+    }
+
+    cout << "============================" << endl;
+    cout << "当前循环把nums划分为两个部分" << endl;
+    cout << "===" << endl;
+    cout << i << "~" << right << endl
+         << nums[i] << "~" << nums[right] << endl;
+    cout << "===" << endl;
+    cout << "\n" << right + 1 << "~" << j << endl
+         << nums[right + 1] << "~" << nums[j] << endl;
+    cout << "============================" << endl;
+    cout << "============================" << endl;
+
+    Hoare(nums, i, right);
+    Hoare(nums, right + 1, j);
+}
+
+int main()
+{
+    int nums[] = { 8,4,3,3,4,1,6,5 };
+    const int length = sizeof(nums) / sizeof(nums[0]);
+    Hoare(nums, 0, length - 1);
+    for (auto& u : nums) {
+        cout << u << " ";
+    }
+    cout << endl;
+    return 0;
+}
