@@ -1,0 +1,70 @@
+#include <iostream>
+using namespace std;
+
+struct ListNode
+{
+    int val;
+    ListNode* next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+// 找链表的中点（返回中点节点，偶数返回前中点）
+ListNode* findMiddle(ListNode* head)
+{
+    if (!head) return nullptr;
+
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast->next != nullptr && fast->next->next != nullptr)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    return slow;
+}
+
+ListNode* createList(int arr[], int n)
+{
+    if (n == 0) return nullptr;
+
+    ListNode* head = new ListNode(arr[0]);
+    ListNode* cur = head;
+
+    for (int i = 1; i < n; i++)
+    {
+        cur->next = new ListNode(arr[i]);
+        cur = cur->next;
+    }
+
+    return head;
+}
+
+void printList(ListNode* head)
+{
+    while (head != nullptr)
+    {
+        cout << head->val << " -> ";
+        head = head->next;
+    }
+    cout << "nullptr" << endl;
+}
+
+int main()
+{
+    int arr[] = {1, 2, 3, 4, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    ListNode* head = createList(arr, n);
+    cout << "链表: ";
+    printList(head);
+
+    ListNode* mid = findMiddle(head);
+    if (mid)
+        cout << "中点节点的值: " << mid->val << endl;
+    else
+        cout << "链表为空" << endl;
+
+    return 0;
+}
